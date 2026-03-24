@@ -5,21 +5,21 @@ const GOOGLE_SHEET_CSV_URL = 'You said
 https://docs.google.com/spreadsheets/d/e/2PACX-1vTaexlDP6OM2RS7etcnYNiazJXyohbieidwYddAFyRefSF-tAg7yJywDp3P3QL5P7ibQl58ZDPVquSq/pub?gid=0&single=true&output=csv'; 
 
 // --- 공통: 오버레이 메뉴 토글 로직 ---
-const menuOpenBtn = document.getElementById('menu-open-btn');
-const menuCloseBtn = document.getElementById('menu-close-btn');
-const menuOverlay = document.getElementById('menu-overlay-area');
+const menuToggleBtn = document.getElementById('menu-toggle-btn');
+const closeOverlayBtn = document.getElementById('close-overlay-btn'); // 오버레이 전용 'X' 닫기 버튼
+const menuOverlayArea = document.getElementById('menu-overlay-area');
 
 function toggleMenu() {
     document.body.classList.toggle('menu-open');
 }
 
-if (menuOpenBtn && menuCloseBtn && menuOverlay) {
-    menuOpenBtn.addEventListener('click', toggleMenu);
-    menuCloseBtn.addEventListener('click', toggleMenu);
+if (menuToggleBtn && closeOverlayBtn && menuOverlayArea) {
+    menuToggleBtn.addEventListener('click', toggleMenu);
+    closeOverlayBtn.addEventListener('click', toggleMenu); // 오버레이 'X'로 닫기
     
     // 오버레이 배경 클릭 시에도 닫기
-    menuOverlay.addEventListener('click', (e) => {
-        if (e.target === menuOverlay) {
+    menuOverlayArea.addEventListener('click', (e) => {
+        if (e.target === menuOverlayArea) {
             toggleMenu();
         }
     });
@@ -43,7 +43,7 @@ async function fetchAndParseCSV() {
     }
 }
 
-// 1. [메인 페이지] 조밀한 불규칙 갤러리 로딩
+// 1. [메인 페이지] 조밀한 불규칙 갤러리 로딩 (클릭 가능하게)
 async function loadMainGallery() {
     if (!galleryFeed) return;
     
@@ -57,12 +57,14 @@ async function loadMainGallery() {
 
         const title = columns[0];
         const imageUrl = columns[1];
-        // [수정] 날짜 데이터 가져오기 (C열)
+        // 날짜 데이터 가져오기 (C열)
         const date = columns[2] ? columns[2] : ''; 
 
         if(imageUrl) {
             const article = document.createElement('article');
-            // [수정] 클릭 가능한 상세 페이지 링크 추가 (post.html?id=행번호)
+            // [핵심] 클릭 가능한 상세 페이지 링크 추가 (post.html?id=행번호)
+            // ugly purple links 제거를 위해 `<a>`에 직접 스타일 적용 대신 script.js에서 article 태그에 `post-article-card` 클래스 부여
+            // script.js에 style.css의 .post-article-card {display:block} 가 적용되도록 article 태그의 innerHTML을 수정
             article.innerHTML = `
                 <a href="post.html?id=${index + 2}" class="post-article-card">
                     <img src="${imageUrl}" alt="${title}" class="post-image-thumbnail">
@@ -73,7 +75,7 @@ async function loadMainGallery() {
     });
 }
 
-// 2. [상상 페이지] 동적 컨텐츠 로딩 (image_2.png 스타일)
+// 2. [상 상세 페이지] 동적 컨텐츠 로딩 (image_2.png 스타일)
 async function loadPostDetail() {
     if (!detailContentArea || !document.body.classList.contains('page-detail')) return;
 

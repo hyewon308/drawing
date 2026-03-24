@@ -13,8 +13,19 @@ body {
     overflow-x: hidden;
 }
 
-a { text-decoration: none; color: inherit; transition: opacity 0.3s; }
-a:hover { opacity: 0.6; }
+/* --- [핵심] 촌스러운 링크 스타일 제거 및 세련된 호버 효과 --- */
+a {
+    text-decoration: none; /* 밑줄 제거 */
+    color: #111; /* 보라색 대신 검정색 고정 */
+    transition: opacity 0.3s;
+}
+/* 다 가본 링크 색 제거: a:visited, a:active 모두 color를 #111로 고정 */
+a:visited, a:active {
+    color: #111; 
+}
+a:hover {
+    color: #888; /* 호버했을 때만 부드럽게 색 변화 */
+}
 
 /* --- 헤더 스타일: 좌 로고, 우 햄버거 (공통) --- */
 .site-header {
@@ -28,7 +39,6 @@ a:hover { opacity: 0.6; }
 }
 
 .header-left { display: flex; align-items: baseline; gap: 15px; }
-/* 로고 및 직업 변경: Navhooe 만화가 */
 .site-logo { font-size: 20px; font-weight: 600; letter-spacing: -0.5px; }
 .site-subtitle { font-size: 13px; font-weight: 300; color: #666; }
 
@@ -46,11 +56,11 @@ a:hover { opacity: 0.6; }
 .menu-open .menu-toggle span:nth-child(2) { opacity: 0; }
 .menu-open .menu-toggle span:nth-child(3) { transform: rotate(-45deg) translate(5px, -5px); }
 
-/* --- 오버레이 드롭다운 메뉴 스타일 (공통) --- */
+/* --- [수정] 오버레이 드롭다운 메뉴 스타일 (image_4.png처럼) --- */
 .menu-overlay {
     position: fixed;
     top: 0; left: 0;
-    width: 100%; height: 100%;
+    width: 100vw; height: 100vh;
     background-color: rgba(234, 233, 231, 0.95); /* 투명한 따뜻한 그레이 배경 */
     z-index: 1000;
     display: flex;
@@ -73,6 +83,22 @@ a:hover { opacity: 0.6; }
 }
 .menu-overlay a:hover { color: #888; }
 
+/* 오버레이 전용 'X' 닫기 아이콘 */
+.close-overlay {
+    position: absolute;
+    top: 40px;
+    right: 40px;
+    background: none;
+    border: none;
+    cursor: pointer;
+    font-size: 24px;
+    color: #000;
+    z-index: 1002;
+    display: none; /* 기본 숨김 */
+}
+.menu-open .close-overlay { display: block; } /* 메뉴 열렸을 때만 표시 */
+
+
 /* --- [메인] 조밀한 불규칙 갤러리 (Masonry 레이아웃) --- */
 .gallery-container {
     max-width: 1400px;
@@ -81,21 +107,20 @@ a:hover { opacity: 0.6; }
     column-gap: 30px; /* 컬럼 사이 간격 */
 }
 
-/* 개별 이미지 아이템 - [수정] 클릭 가능하게 */
+/* [핵심] 개별 포스트 아이템 - 클릭 가능하게 `<a>`로 구성 */
 .post-article-card {
     break-inside: avoid; /* 이미지가 컬럼 사이에서 잘리지 않도록 함 */
     margin-bottom: 30px; /* 아래쪽 간격 */
     display: block; /* 클릭 가능 */
+    transition: transform 0.4s ease;
 }
+.post-article-card:hover { transform: scale(1.03); } /* 호버 효과 */
 
 .post-image-thumbnail {
     width: 100%;
     height: auto;
     display: block;
-    transition: transform 0.4s ease;
 }
-/* 호버 효과 */
-.post-article-card:hover .post-image-thumbnail { transform: scale(1.03); }
 
 /* --- [상세 페이지] 스타일 (post.html 용) --- */
 .detail-container {
@@ -140,3 +165,41 @@ a:hover { opacity: 0.6; }
 /* --- [About 페이지] 스타일 (about.html 용) - [핵심] 가운데 정렬 --- */
 .about-container {
     max-width: 800px;
+    margin: 100px auto;
+    text-align: center; /* 전체 가운데 정렬 */
+}
+
+.about-page-title {
+    font-size: 32px;
+    font-weight: 700;
+    margin-bottom: 40px;
+}
+
+.about-page-image {
+    width: 100%;
+    height: auto;
+    max-width: 600px;
+    border-radius: 4px;
+    margin: 0 auto 40px;
+    display: block;
+}
+
+.about-page-body p {
+    font-size: 17px;
+    color: #444;
+    margin-bottom: 25px;
+    line-height: 1.8;
+}
+
+/* --- 모바일 대응 --- */
+@media (max-width: 900px) {
+    body { padding: 0 20px; }
+    .gallery-container { column-count: 2; column-gap: 20px; }
+    .detail-container, .about-container { margin: 40px auto; }
+}
+@media (max-width: 600px) {
+    .gallery-container { column-count: 1; column-gap: 15px; }
+    .menu-overlay a { font-size: 20px; }
+    .detail-post-title { font-size: 22px; }
+    .detail-post-body { margin: 0; text-align: left; } /* 모바일에선 왼쪽 정렬 */
+}
