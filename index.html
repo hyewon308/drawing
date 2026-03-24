@@ -5,219 +5,33 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Navhooe | 만화가</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600&family=Noto+Sans+KR:wght@300;400;700&display=swap" rel="stylesheet">
-    <style>
-        /* --- 기본 스타일 (노안을 고려해 폰트 크기와 대비를 높였습니다) --- */
-        :root {
-            --main-blue: #0000E7;
-            --bg-color: #ffffff;
-            --text-color: #111111;
-        }
-
-        * { box-sizing: border-box; margin: 0; padding: 0; }
-        body {
-            font-family: 'Inter', 'Noto Sans KR', sans-serif;
-            background-color: var(--bg-color);
-            color: var(--text-color);
-            line-height: 1.7;
-            padding-top: 80px; /* 헤더 공간 */
-        }
-        a { color: inherit; text-decoration: none; }
-
-        /* --- 헤더 스타일 --- */
-        .site-header {
-            position: fixed; top: 0; left: 0; width: 100%;
-            background: rgba(255, 255, 255, 0.95);
-            border-bottom: 1px solid #eeeeee;
-            padding: 15px 5%;
-            display: flex; justify-content: space-between; align-items: center;
-            z-index: 1000;
-        }
-        .site-logo { font-size: 24px; font-weight: 700; color: var(--main-blue); }
-        .site-subtitle { font-size: 14px; margin-left: 10px; color: #666; }
-
-        /* --- 메뉴 버튼 --- */
-        .menu-toggle {
-            background: none; border: none; cursor: pointer;
-            width: 30px; height: 20px; position: relative;
-        }
-        .menu-toggle span {
-            display: block; width: 100%; height: 2px;
-            background: var(--main-blue); margin-bottom: 5px;
-            transition: 0.3s;
-        }
-
-        /* --- 메뉴 레이어 (오버레이) --- */
-        .menu-overlay {
-            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-            background: white; z-index: 999;
-            display: none; flex-direction: column;
-            justify-content: center; align-items: center;
-        }
-        .menu-overlay.active { display: flex; }
-        .menu-overlay ul { list-style: none; text-align: center; }
-        .menu-overlay li { margin: 20px 0; }
-        .menu-overlay a { font-size: 30px; font-weight: 700; }
-
-        /* --- 갤러리/포스트 컨테이너 --- */
-        .gallery-container {
-            max-width: 1200px; margin: 40px auto; padding: 0 20px;
-            display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
-            gap: 30px;
-        }
-
-        /* 상세 페이지일 때 컨테이너 스타일 */
-        .detail-view { max-width: 800px; margin: 40px auto; padding: 0 20px; grid-template-columns: 1fr; }
-
-        /* --- 카드 스타일 --- */
-        .post-card { border: 1px solid #eee; padding: 20px; transition: 0.3s; }
-        .post-card:hover { border-color: var(--main-blue); }
-        .post-title { font-size: 22px; font-weight: 700; margin-bottom: 15px; display: block; }
-        .post-excerpt { font-size: 15px; color: #444; margin-bottom: 20px; max-height: 150px; overflow: hidden; }
-
-        /* --- 이미지 스타일 (핵심) --- */
-        img {
-            max-width: 100%; height: auto; display: block;
-            margin: 15px 0; border-radius: 4px;
-        }
-        .card-thumbnail img { margin: 0 0 15px 0; max-height: 250px; object-fit: cover; width: 100%; }
-
-        /* --- 푸터 --- */
-        .site-footer { text-align: center; padding: 60px 0; font-size: 13px; color: #888; border-top: 1px solid #eee; margin-top: 100px; }
-
-        /* 태그 */
-        .tag { display: inline-block; margin-right: 10px; font-size: 13px; color: var(--main-blue); font-weight: 600; }
-
-        /* 이전/다음 글 */
-        .post-nav { display: flex; justify-content: space-between; margin-top: 60px; padding-top: 20px; border-top: 1px solid #eee; font-weight: bold; }
-    </style>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
 </head>
 <body>
     <header class="site-header">
         <div class="header-left">
-            <a href="./"><h1 class="site-logo">Navhooe</h1></a>
+            <h1 class="site-logo">Navhooe</h1>
             <span class="site-subtitle">만화가</span>
         </div>
-        <button class="menu-toggle" id="menu-toggle-btn">
+        <button class="menu-toggle" id="menu-toggle-btn" aria-label="메뉴 토글">
             <span></span><span></span><span></span>
         </button>
     </header>
 
     <div class="menu-overlay" id="menu-overlay-area">
         <ul>
-            <li><a href="./">포트폴리오</a></li>
+            <li><a href="index.html">포트폴리오</a></li>
             <li><a href="about.html">이 사이트에 대하여</a></li>
         </ul>
     </div>
 
-    <main class="gallery-container" id="gallery-feed">
-        <p style="text-align:center; grid-column: 1/-1;">포트폴리오를 불러오는 중입니다...</p>
-    </main>
+    <main class="gallery-container" id="gallery-feed"></main>
 
     <footer class="site-footer">
         navhooe &copy; all rights reserved
     </footer>
 
-    <script>
-        // 1. 구글 시트 CSV 주소
-        const SHEET_URL = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vTTMsp7P7HBbupv1HqtWgw8koVO9p28myR3bFmMfLdaAaGeo72ufEhZo3meZHzjLTskYDeJg-TI4kBD/pub?gid=0&single=true&output=csv';
-
-        // 2. 메뉴 토글 기능
-        const menuBtn = document.getElementById('menu-toggle-btn');
-        const menuOverlay = document.getElementById('menu-overlay-area');
-        menuBtn.onclick = () => menuOverlay.classList.toggle('active');
-        menuOverlay.onclick = () => menuOverlay.classList.remove('active');
-
-        // 3. 이미지 주소 자동 변환 함수
-        function formatContent(text) {
-            if (!text) return '';
-            // http로 시작하고 이미지 확장자로 끝나는 텍스트를 찾아 <img> 태그로 변환
-            const imageRegex = /(https?:\/\/.*\.(?:png|jpg|jpeg|gif|webp|svg))/gi;
-            return text.replace(imageRegex, '<img src="$1" alt="portfolio image">');
-        }
-
-        // 4. CSV 파서
-        function parseCSV(text) {
-            const rows = []; let row = []; let cell = ''; let isQuoted = false;
-            for (let i = 0; i < text.length; i++) {
-                let c = text[i], next = text[i+1];
-                if (c === '"' && isQuoted && next === '"') { cell += '"'; i++; }
-                else if (c === '"') { isQuoted = !isQuoted; }
-                else if (c === ',' && !isQuoted) { row.push(cell); cell = ''; }
-                else if (c === '\n' && !isQuoted) {
-                    row.push(cell); rows.push(row); row = []; cell = '';
-                } else { cell += c; }
-            }
-            if (cell !== '' || row.length > 0) { row.push(cell); rows.push(row); }
-            const headers = rows[0].map(h => h.trim().toLowerCase());
-            return rows.slice(1).map(r => {
-                let obj = {};
-                headers.forEach((h, i) => obj[h] = r[i] ? r[i].trim() : "");
-                return obj;
-            }).filter(item => item.id);
-        }
-
-        const feed = document.getElementById('gallery-feed');
-
-        // 5. 메인 리스트 렌더링
-        function renderList(posts) {
-            feed.innerHTML = '';
-            feed.classList.remove('detail-view');
-            [...posts].reverse().forEach(post => {
-                const contentHTML = formatContent(post.content || '');
-                const tags = post.tags ? post.tags.split(',').map(t => `<span class="tag">#${t.trim()}</span>`).join('') : '';
-                
-                feed.innerHTML += `
-                    <div class="post-card">
-                        <a href="?post=${post.id}" class="post-title">${post.title}</a>
-                        <div class="post-excerpt">${contentHTML}</div>
-                        <div class="post-tags">${tags}</div>
-                    </div>
-                `;
-            });
-        }
-
-        // 6. 상세 페이지 렌더링
-        function renderPost(post, allPosts) {
-            if (!post) { feed.innerHTML = '<p>글을 찾을 수 없습니다.</p>'; return; }
-            feed.innerHTML = '';
-            feed.classList.add('detail-view');
-
-            const contentHTML = formatContent(post.content || '');
-            const currentIndex = allPosts.findIndex(p => p.id === post.id);
-            const prev = allPosts[currentIndex - 1];
-            const next = allPosts[currentIndex + 1];
-
-            feed.innerHTML = `
-                <div class="detail-wrap">
-                    <h2 style="font-size:32px; margin-bottom:30px; color:var(--main-blue);">${post.title}</h2>
-                    <div style="font-size:18px;">${contentHTML}</div>
-                    <div class="post-nav">
-                        ${prev ? `<a href="?post=${prev.id}">← 이전 작품</a>` : '<span></span>'}
-                        <a href="./">목록으로</a>
-                        ${next ? `<a href="?post=${next.id}">다음 작품 →</a>` : '<span></span>'}
-                    </div>
-                </div>
-            `;
-        }
-
-        // 7. 초기 실행
-        async function init() {
-            try {
-                const res = await fetch(SHEET_URL);
-                const data = parseCSV(await res.text());
-                const postId = new URLSearchParams(window.location.search).get('post');
-
-                if (postId) {
-                    renderPost(data.find(p => p.id === postId), data);
-                } else {
-                    renderList(data);
-                }
-            } catch (e) {
-                feed.innerHTML = '<p>데이터를 불러오지 못했습니다. 시트 주소를 확인해주세요.</p>';
-            }
-        }
-        init();
-    </script>
+    <script src="script.js"></script>
 </body>
 </html>
