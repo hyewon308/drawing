@@ -2,60 +2,91 @@
 * { box-sizing: border-box; margin: 0; padding: 0; }
 
 body {
-    background-color: #eae9e7;
+    background-color: #eae9e7; /* 따뜻한 회색 배경 */
     color: #111;
     font-family: 'Inter', 'Noto Sans KR', sans-serif;
     line-height: 1.6;
-    padding: 0 40px; /* PC 여백 */
+    padding: 0 40px;
     display: flex;
     flex-direction: column;
     min-height: 100vh;
 }
 
-/* --- 이미지 반응형 설정 (핵심) --- */
-img {
-    width: 100%; /* 부모 요소 너비에 무조건 맞춤 */
-    max-width: 100%; 
-    height: auto; /* 비율 유지 */
-    display: block;
+/* --- 링크 밑줄 및 색상 문제 해결 --- */
+a { 
+    text-decoration: none !important; /* 밑줄 강제 제거 */
+    color: #111 !important; /* 보라색/파란색 변함 방지 */
+    transition: 0.3s;
 }
+a:hover { color: #888 !important; }
 
-/* 상세페이지 내 이미지 (본문 삽입용) */
-.in-content-image, .detail-post-image {
-    width: 100%; 
-    margin: 30px 0; /* 위아래 간격 */
-    border-radius: 2px;
-}
-
-/* 갤러리 썸네일 */
-.post-image-thumbnail {
+/* 헤더 */
+.site-header {
+    height: 100px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    max-width: 1400px;
     width: 100%;
-    aspect-ratio: 1 / 1; /* 썸네일을 정사각형으로 통일하고 싶을 때 사용 (선택사항) */
-    object-fit: cover;
+    margin: 0 auto;
+    position: relative;
+    z-index: 1002;
+}
+.site-logo { font-size: 20px; font-weight: 600; }
+.site-subtitle { font-size: 13px; color: #666; margin-left: 10px; }
+
+/* 햄버거 메뉴 버튼 */
+.menu-toggle {
+    background: none; border: none; cursor: pointer;
+    width: 20px; height: 16px;
+    display: flex; flex-direction: column; justify-content: space-between;
+    z-index: 1005;
+}
+.menu-toggle span { display: block; width: 100%; height: 2px; background-color: #000; transition: 0.3s; }
+
+/* 메뉴 오픈 시 X 변환 */
+.menu-open .menu-toggle span:nth-child(1) { transform: translateY(7px) rotate(45deg); }
+.menu-open .menu-toggle span:nth-child(2) { opacity: 0; }
+.menu-open .menu-toggle span:nth-child(3) { transform: translateY(-7px) rotate(-45deg); }
+
+/* --- [복구] 메뉴 오버레이 --- */
+.menu-overlay {
+    position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+    background-color: rgba(234, 233, 231, 0.98);
+    z-index: 1000;
+    opacity: 0;
+    visibility: hidden; /* 평소엔 숨김 */
+    transition: 0.3s ease;
+    display: flex;
+    justify-content: flex-end;
+    padding: 120px 40px;
+}
+.menu-open .menu-overlay {
+    opacity: 1;
+    visibility: visible; /* 열렸을 때만 보임 */
+}
+.menu-overlay ul { 
+    list-style: none; /* 불렛 포인트 제거 */
+    text-align: right; 
+}
+.menu-overlay li { margin-bottom: 25px; }
+.menu-overlay a { font-size: 16px; font-weight: 500; }
+
+/* 이미지 반응형 및 모바일 최적화 */
+img { width: 100%; height: auto; display: block; }
+.in-content-image, .detail-post-image { width: 100%; margin: 30px 0; border-radius: 2px; }
+
+.gallery-container {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    gap: 20px;
+    padding: 40px 0;
 }
 
-/* 헤더 및 레이아웃 */
-.site-header { height: 100px; display: flex; justify-content: space-between; align-items: center; max-width: 1200px; width: 100%; margin: 0 auto; }
-.site-logo { font-size: 20px; font-weight: 600; }
-.gallery-container { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 20px; padding: 40px 0; }
+.site-footer { text-align: center; padding: 40px 0; font-size: 12px; color: #888; }
 
-/* 상세페이지 본문 */
-.detail-post-article { max-width: 800px; margin: 0 auto; padding: 20px 0; }
-.detail-post-body { font-size: 16px; word-break: break-all; }
-
-/* --- 📱 모바일 전용 스타일 (반응형) --- */
+/* 모바일 대응 */
 @media (max-width: 768px) {
-    body {
-        padding: 0 15px; /* 모바일에서는 옆 여백을 줄여서 이미지가 더 커 보이게 함 */
-    }
-    .site-header {
-        height: 70px;
-    }
-    .gallery-container {
-        grid-template-columns: 1fr; /* 모바일은 한 줄에 하나씩 */
-        gap: 15px;
-    }
-    .detail-post-title {
-        font-size: 24px;
-    }
+    body { padding: 0 20px; }
+    .gallery-container { grid-template-columns: 1fr; }
 }
