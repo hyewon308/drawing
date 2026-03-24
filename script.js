@@ -1,8 +1,7 @@
 // script.js
 
 // [중요] 사용 중인 구글 시트 CSV 링크를 여기에 붙여넣으세요 (끝이 pub?output=csv 인지 확인!)
-const GOOGLE_SHEET_CSV_URL = 'You said
-https://docs.google.com/spreadsheets/d/e/2PACX-1vTaexlDP6OM2RS7etcnYNiazJXyohbieidwYddAFyRefSF-tAg7yJywDp3P3QL5P7ibQl58ZDPVquSq/pub?gid=0&single=true&output=csv'; 
+const GOOGLE_SHEET_CSV_URL = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vTaexlDP6OM2RS7etcnYNiazJXyohbieidwYddAFyRefSF-tAg7yJywDp3P3QL5P7ibQl58ZDPVquSq/pub?gid=0&single=true&output=csv'; 
 
 // --- 공통: 오버레이 메뉴 토글 로직 ---
 const menuToggleBtn = document.getElementById('menu-toggle-btn');
