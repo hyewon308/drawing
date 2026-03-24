@@ -1,4 +1,6 @@
-/* 기본 초기화 */
+/* style.css */
+
+/* --- 기본 설정 및 폰트 --- */
 * { box-sizing: border-box; margin: 0; padding: 0; }
 body {
     background-color: #eae9e7; /* 레퍼런스의 따뜻한 그레이 배경색 */
@@ -7,9 +9,14 @@ body {
     line-height: 1.5;
     padding: 0 40px; /* 좌우 여백 */
     -webkit-font-smoothing: antialiased;
+    position: relative; /* 오버레이 메뉴를 위해 */
+    overflow-x: hidden;
 }
 
-/* 헤더 스타일: 레퍼런스와 동일하게 좌 로고, 우 햄버거 */
+a { text-decoration: none; color: inherit; transition: opacity 0.3s; }
+a:hover { opacity: 0.6; }
+
+/* --- 헤더 스타일: 좌 로고, 우 햄버거 (공통) --- */
 .site-header {
     height: 100px;
     display: flex;
@@ -17,51 +24,119 @@ body {
     align-items: center;
     max-width: 1400px;
     margin: 0 auto;
+    position: relative; /* 메뉴 토글 버튼을 위해 */
 }
 
 .header-left { display: flex; align-items: baseline; gap: 15px; }
+/* 로고 및 직업 변경: Navhooe 만화가 */
 .site-logo { font-size: 20px; font-weight: 600; letter-spacing: -0.5px; }
 .site-subtitle { font-size: 13px; font-weight: 300; color: #666; }
 
-/* 햄버거 메뉴 아이콘 */
+/* --- 햄버거 메뉴 토글 버튼 (공통) --- */
 .menu-toggle {
     background: none; border: none; cursor: pointer;
     width: 20px; height: 16px;
     display: flex; flex-direction: column; justify-content: space-between;
+    z-index: 1001; /* 오버레이보다 위 */
 }
-.menu-toggle span { display: block; width: 100%; height: 2px; background-color: #000; }
+.menu-toggle span { display: block; width: 100%; height: 2px; background-color: #000; transition: all 0.3s; }
 
-/* [핵심] 불규칙 조밀 갤러리 (Masonry 레이아웃) */
+/* 메뉴가 열렸을 때 햄버거 아이콘 변환 (X 형태) */
+.menu-open .menu-toggle span:nth-child(1) { transform: rotate(45deg) translate(5px, 5px); }
+.menu-open .menu-toggle span:nth-child(2) { opacity: 0; }
+.menu-open .menu-toggle span:nth-child(3) { transform: rotate(-45deg) translate(5px, -5px); }
+
+/* --- 오버레이 드롭다운 메뉴 스타일 (공통) --- */
+.menu-overlay {
+    position: fixed;
+    top: 0; left: 0;
+    width: 100%; height: 100%;
+    background-color: rgba(234, 233, 231, 0.95); /* 투명한 따뜻한 그레이 배경 */
+    z-index: 1000;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    opacity: 0; visibility: hidden; /* 기본: 숨김 */
+    transition: all 0.4s ease-in-out;
+}
+
+/* 메뉴가 열렸을 때 오버레이 활성화 */
+.menu-open .menu-overlay { opacity: 1; visibility: visible; }
+
+.menu-overlay ul { list-style: none; text-align: center; }
+.menu-overlay li { margin: 25px 0; }
+.menu-overlay a {
+    font-size: 28px;
+    font-weight: 400;
+    color: #000;
+}
+.menu-overlay a:hover { color: #888; }
+
+/* --- [메인] 조밀한 불규칙 갤러리 (Masonry 레이아웃) --- */
 .gallery-container {
     max-width: 1400px;
     margin: 20px auto 100px;
-    column-count: 3; /* 세로 컬럼 수. 화면이 크면 3개 */
-    column-gap: 30px; /* 컬럼 사이 간격. 아주 좁게 */
+    column-count: 3; /* 세로 컬럼 수 */
+    column-gap: 30px; /* 컬럼 사이 간격 */
 }
 
-/* 개별 이미지 아이템 */
-.post-article {
+/* 개별 이미지 아이템 - [수정] 클릭 가능하게 */
+.post-article-card {
     break-inside: avoid; /* 이미지가 컬럼 사이에서 잘리지 않도록 함 */
     margin-bottom: 30px; /* 아래쪽 간격 */
-    position: relative;
-    overflow: hidden;
+    display: block; /* 클릭 가능 */
 }
 
-.post-image {
+.post-image-thumbnail {
     width: 100%;
     height: auto;
     display: block;
-    /* transition: transform 0.4s ease; /* 호버 효과를 원하면 주석 해제 */
+    transition: transform 0.4s ease;
+}
+/* 호버 효과 */
+.post-article-card:hover .post-image-thumbnail { transform: scale(1.03); }
+
+/* --- [상세 페이지] 스타일 (post.html 용) --- */
+.detail-container {
+    max-width: 1000px;
+    margin: 60px auto 100px;
 }
 
-/* 마우스 올렸을 때 효과 (원할 경우 주석 해제) */
-/* .post-article:hover .post-image { transform: scale(1.03); } */
+.detail-post-article {
+    text-align: left; /* 기본 정렬 */
+}
 
-/* 모바일 화면 대응 */
-@media (max-width: 900px) {
-    body { padding: 0 20px; }
-    .gallery-container { column-count: 2; column-gap: 20px; }
+.detail-post-image {
+    width: 100%;
+    height: auto;
+    display: block;
+    margin-bottom: 40px;
 }
-@media (max-width: 600px) {
-    .gallery-container { column-count: 1; column-gap: 15px; }
+
+.detail-post-meta-area {
+    margin-bottom: 30px;
 }
+
+.detail-post-title {
+    font-size: 28px;
+    font-weight: 600;
+    margin-bottom: 10px;
+}
+
+.detail-post-date {
+    font-size: 14px;
+    color: #666;
+    margin-bottom: 25px;
+}
+
+.detail-post-body {
+    font-size: 16px;
+    color: #333;
+    max-width: 700px; /* 본문 폭 제한 */
+    margin: 0 0 0 auto; /* [수정] 본문만 오른쪽 정렬 - image_2.png 스타일 */
+}
+
+/* --- [About 페이지] 스타일 (about.html 용) - [핵심] 가운데 정렬 --- */
+.about-container {
+    max-width: 800px;
