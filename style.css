@@ -1,98 +1,78 @@
 /* style.css */
-
 * { box-sizing: border-box; margin: 0; padding: 0; }
 
 body {
     background-color: #eae9e7;
     color: #111;
-    font-family: 'Inter', 'Noto Sans KR', sans-serif;
-    line-height: 1.6;
+    font-family: 'Inter', sans-serif;
+    line-height: 1.5;
     padding: 0 40px;
     display: flex;
     flex-direction: column;
     min-height: 100vh;
 }
 
-/* 링크 기본 설정 */
-a { text-decoration: none; color: inherit; transition: 0.3s; }
-a:hover { opacity: 0.7; }
+a { text-decoration: none; color: #111; transition: 0.3s; }
+a:hover { color: #888; }
 
-/* 헤더 */
 .site-header {
     height: 100px;
     display: flex;
     justify-content: space-between;
     align-items: center;
-    max-width: 1200px;
+    max-width: 1400px;
     width: 100%;
     margin: 0 auto;
+    z-index: 1002;
 }
-.site-logo { font-size: 24px; font-weight: 700; color: #0000E7; }
+
+.site-logo { font-size: 20px; font-weight: 600; }
 .site-subtitle { font-size: 13px; color: #666; margin-left: 10px; }
 
 /* 햄버거 메뉴 */
 .menu-toggle {
     background: none; border: none; cursor: pointer;
-    width: 25px; height: 18px;
+    width: 20px; height: 16px;
     display: flex; flex-direction: column; justify-content: space-between;
     z-index: 1002;
 }
 .menu-toggle span { display: block; width: 100%; height: 2px; background-color: #000; transition: 0.3s; }
 
-/* 메뉴 오픈 시 X 변환 */
-.menu-open .menu-toggle span:nth-child(1) { transform: translateY(8px) rotate(45deg); }
+.menu-open .menu-toggle span:nth-child(1) { transform: translateY(7px) rotate(45deg); }
 .menu-open .menu-toggle span:nth-child(2) { opacity: 0; }
-.menu-open .menu-toggle span:nth-child(3) { transform: translateY(-8px) rotate(-45deg); }
+.menu-open .menu-toggle span:nth-child(3) { transform: translateY(-7px) rotate(-45deg); }
 
 /* 오버레이 메뉴 */
 .menu-overlay {
     position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-    background: rgba(234, 233, 231, 0.98);
+    background-color: rgba(234, 233, 231, 0.95);
     z-index: 1000; opacity: 0; visibility: hidden;
     transition: 0.3s;
     display: flex; justify-content: flex-end;
-    padding: 120px 40px;
+    padding: 100px 40px 0 0;
 }
 .menu-open .menu-overlay { opacity: 1; visibility: visible; }
 .menu-overlay ul { list-style: none; text-align: right; }
-.menu-overlay li { margin-bottom: 25px; }
-.menu-overlay a { font-size: 18px; font-weight: 600; }
+.menu-overlay li { margin-bottom: 20px; }
+.menu-overlay a { font-size: 14px; }
 
-/* 메인 컨텐츠 및 갤러리 */
-main { flex: 1; max-width: 1200px; width: 100%; margin: 0 auto; padding-bottom: 60px; }
+/* 갤러리 */
+main { flex: 1; max-width: 1400px; width: 100%; margin: 0 auto; }
 .gallery-container {
     display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
-    gap: 30px;
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    gap: 20px;
+    padding: 40px 0;
 }
 
-/* 카드 스타일 */
-.post-card { border: 1px solid #ddd; padding: 15px; background: #fff; }
-.post-title { font-size: 18px; font-weight: 700; margin-top: 15px; }
-.card-thumbnail img { 
-    width: 100%; height: 200px; object-fit: cover; 
-    border-radius: 2px;
-}
+.post-image-thumbnail { width: 100%; height: auto; display: block; object-fit: cover; }
 
-/* --- 본문 내 자동 삽입 이미지 스타일 --- */
-.in-content-image {
-    max-width: 100%;
-    height: auto;
-    display: block;
-    margin: 30px auto;
-    border-radius: 4px;
-    box-shadow: 0 4px 10px rgba(0,0,0,0.1);
-}
-
-/* 상세 페이지 */
-.detail-post-article { max-width: 800px; margin: 0 auto; padding: 40px 0; }
-.detail-post-meta-area { text-align: center; margin-bottom: 40px; border-bottom: 1px solid #ccc; padding-bottom: 20px; }
-.detail-post-title { font-size: 32px; font-weight: 800; margin-bottom: 10px; }
-.detail-post-date { font-size: 14px; color: #888; }
-.detail-post-body { font-size: 17px; line-height: 1.8; word-break: break-all; }
+/* 상세페이지 이미지 */
+.detail-post-image { max-width: 100%; height: auto; display: block; margin: 0 auto 30px; }
+.detail-post-meta-area { text-align: center; margin-bottom: 30px; }
+.detail-post-title { font-size: 24px; margin-bottom: 5px; }
+.detail-post-date { font-size: 14px; color: #666; }
+.detail-post-body { max-width: 800px; margin: 0 auto; line-height: 1.8; white-space: pre-wrap; }
 
 /* 푸터 */
-.site-footer {
-    text-align: center; padding: 40px 0;
-    font-size: 12px; color: #888;
-}
+.site-footer { text-align: center; padding: 40px 0 20px; font-size: 12px; color: #888; }
