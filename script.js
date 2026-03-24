@@ -1,13 +1,21 @@
 // script.js
 const GOOGLE_SHEET_CSV_URL = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vTaexlDP6OM2RS7etcnYNiazJXyohbieidwYddAFyRefSF-tAg7yJywDp3P3QL5P7ibQl58ZDPVquSq/pub?gid=0&single=true&output=csv'; 
 
-// 메뉴 토글
-const menuBtn = document.getElementById('menu-toggle-btn');
-if (menuBtn) {
-    menuBtn.onclick = () => document.body.classList.toggle('menu-open');
+// 메뉴 토글 (오버레이 작동용)
+const menuToggleBtn = document.getElementById('menu-toggle-btn');
+if (menuToggleBtn) {
+    menuToggleBtn.onclick = () => document.body.classList.toggle('menu-open');
 }
 
-// 깃허브 주소 변환 및 이미지 태그 생성
+// 오버레이 클릭 시 닫기
+const menuOverlayArea = document.getElementById('menu-overlay-area');
+if (menuOverlayArea) {
+    menuOverlayArea.onclick = (e) => {
+        if (e.target === menuOverlayArea) document.body.classList.remove('menu-open');
+    };
+}
+
+// 본문 이미지 주소 자동 인식 및 깃허브 주소 변환
 function formatContent(text) {
     if (!text) return '';
     const imageRegex = /(https?:\/\/[^\s\n]*\.(?:png|jpg|jpeg|gif|webp|svg)(?:\?[^\s\n]*)?)/gi;
