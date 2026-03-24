@@ -1,45 +1,34 @@
 // script.js
 const GOOGLE_SHEET_CSV_URL = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vTaexlDP6OM2RS7etcnYNiazJXyohbieidwYddAFyRefSF-tAg7yJywDp3P3QL5P7ibQl58ZDPVquSq/pub?gid=0&single=true&output=csv'; 
 
-// --- 메뉴 토글 로직 복구 ---
-const menuToggleBtn = document.getElementById('menu-toggle-btn');
-if (menuToggleBtn) {
-    menuToggleBtn.onclick = () => {
-        document.body.classList.toggle('menu-open');
-    };
+// 메뉴 토글
+const menuBtn = document.getElementById('menu-toggle-btn');
+if (menuBtn) {
+    menuBtn.onclick = () => document.body.classList.toggle('menu-open');
 }
 
-// 오버레이 배경 클릭 시 닫기
-const menuOverlay = document.getElementById('menu-overlay-area');
-if (menuOverlay) {
-    menuOverlay.onclick = (e) => {
-        if (e.target === menuOverlay) document.body.classList.remove('menu-open');
-    };
-}
-
-// 이미지 주소 자동 변환 (깃허브 대응)
+// 깃허브 주소 변환 및 이미지 태그 생성
 function formatContent(text) {
     if (!text) return '';
     const imageRegex = /(https?:\/\/[^\s\n]*\.(?:png|jpg|jpeg|gif|webp|svg)(?:\?[^\s\n]*)?)/gi;
     return text.replace(imageRegex, (url) => {
-        let directUrl = url;
-        if (directUrl.includes('github.com') && directUrl.includes('/blob/')) {
-            directUrl = directUrl.replace('github.com', 'raw.githubusercontent.com').replace('/blob/', '/').split('?')[0];
+        let dUrl = url;
+        if (dUrl.includes('github.com') && dUrl.includes('/blob/')) {
+            dUrl = dUrl.replace('github.com', 'raw.githubusercontent.com').replace('/blob/', '/').split('?')[0];
         }
-        return `<img src="${directUrl}" class="in-content-image">`;
+        return `<img src="${dUrl}" class="in-content-image">`;
     });
 }
 
 function parseCSV(text) {
-    const rows = []; let row = []; let cell = ''; let isQuoted = false;
+    const rows = []; let row = []; let cell = ''; let isQ = false;
     for (let i = 0; i < text.length; i++) {
         let c = text[i], next = text[i+1];
-        if (c === '"' && isQuoted && next === '"') { cell += '"'; i++; }
-        else if (c === '"') { isQuoted = !isQuoted; }
-        else if (c === ',' && !isQuoted) { row.push(cell); cell = ''; }
-        else if (c === '\n' && !isQuoted) {
-            row.push(cell); rows.push(row); row = []; cell = '';
-        } else { cell += c; }
+        if (c === '"' && isQ && next === '"') { cell += '"'; i++; }
+        else if (c === '"') { isQ = !isQ; }
+        else if (c === ',' && !isQ) { row.push(cell); cell = ''; }
+        else if (c === '\n' && !isQ) { row.push(cell); rows.push(row); row = []; cell = ''; }
+        else { cell += c; }
     }
     if (cell !== '' || row.length > 0) { row.push(cell); rows.push(row); }
     return rows.slice(1).map(r => r.map(c => c.trim()));
